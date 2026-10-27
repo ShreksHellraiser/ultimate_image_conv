@@ -473,6 +473,19 @@ function loadPageElements() {
         }
     }())
 
+    let saveImage = (function() {
+        let a = document.createElement("a")
+        document.body.appendChild(a)
+        a.style = "display: none"
+        return function(blob) {
+            let url = window.URL.createObjectURL(blob)
+            a.href = url
+            a.download = url
+            a.click()
+            window.URL.revokeObjectURL(url)
+        }
+    }())
+
     // Output Stage
     saveOutputButton = document.getElementById("saveOutputButton")
     saveOutputButton.addEventListener("click", () => {
@@ -487,6 +500,9 @@ function loadPageElements() {
     // Preview Stage
     imagePreviewCanvas = document.getElementById("imagePreviewCanvas")
     savePreviewButton = document.getElementById("savePreviewButton")
+    savePreviewButton.addEventListener("click", () => {
+        imagePreviewCanvas.toBlob(saveImage)
+    })
 }
 
 let processTimer
